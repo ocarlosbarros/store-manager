@@ -82,5 +82,26 @@ describe('Verifica se ao chamar "getById" de "ProductModel" ela possuí o compor
         expect(typeof ProductModel.getById).to.be.equal('function');
     });
 
+    describe('Ao buscar determinado produto pelo id informado', () => {
+        describe('Caso não encontre o produto cadastrado com o id informado', () => {
 
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([[],[]]);
+            });
+
+            after(() => {
+                connection.execute.restore();
+            });
+            
+            it('Retorna false caso não encontre o produto buscado pelo id informado', async () => {
+                const result = await ProductModel.getById(999);
+                expect(result).to.be.false;
+            });
+            
+        });
+
+        describe('Caso encontre o produto cadastrado com o id informado', () => {
+
+        });
+    });
 });
