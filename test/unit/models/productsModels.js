@@ -14,7 +14,8 @@ describe('Verifica se ao chamar "getAll" de "ProductModel" ela possuí o comport
         describe('Caso não tenha produtos cadastrados no banco de dados', () => {
 
             before(() => {
-                sinon.stub(connection, 'execute').resolves([]);
+                const expectResult = [[],[]];
+                sinon.stub(connection, 'execute').resolves(expectResult);
             });
         
             after(() => {
