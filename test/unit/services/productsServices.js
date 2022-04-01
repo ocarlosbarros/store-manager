@@ -33,5 +33,43 @@ describe('Verifica se ao chamar "getAll" de "ProductService" ela possuí o compo
 
         });
 
+        describe('Caso tenha produtos cadastrados no banco de dados', () => {
+
+            const expectResult = [
+                {   
+                    id: 1,
+                    name: "Portal Gun",
+                    quantity: 10
+                },
+                {
+                    "id": 2,
+                    "name": "Microverse Battery",
+                    "quantity": 5
+                },
+            ]
+
+            before(() => {
+                sinon.stub(ProductModel, 'getAll').resolves(expectResult);
+            });
+        
+            after(() => {
+                ProductModel.getAll.restore();
+            });
+            
+            it('Verifica se o array retornado não esta vazio', async () => {
+                const product = await ProductService.getAll();
+                expect(product).to.be.an('array').that.is.not.empty;
+            });
+
+            it('Verifica se o valor dentro do array é um objeto', async () => {
+                const [product] = await ProductService.getAll();
+                expect(product).to.be.an('object');
+            });
+
+            it('Verifica se o produto dentro do array possui as chaves "id", "name", "quantity"', async () => {
+                const [product] = await ProductService.getAll();
+                expect(product).to.have.all.keys('id', 'name', 'quantity');
+            });
+        });
     }); 
 });
