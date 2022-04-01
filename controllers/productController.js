@@ -1,25 +1,30 @@
-const ProductModel = require('../models/productModel');
+const ProductService = require('../services/productService');
 
 
 const getAll = async (_request, response, next) => {
     try {
 
-        const products = await ProductModel.getAll();
+        const products = await ProductService.getAll();
         return response.status(200).json(products);
 
     } catch (error) {
-
         next(error);
     }
 
   
 };
 
-const getById = async (request, response) => {
+const getById = async (request, response, next) => {
     const { id } = request.params;
-    const product = await ProductModel.getById(id);
+
+    try {
+        const product = await ProductModel.getById(id);
+        return response.status(200).json(product);
+    } catch (error) {
+        next(error);
+    }
+
   
-    return response.status(200).json(product);
 };
 
 
