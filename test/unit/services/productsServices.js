@@ -73,3 +73,29 @@ describe('Verifica se ao chamar "getAll" de "ProductService" ela possuí o compo
         });
     }); 
 });
+
+describe('Verifica se ao chamar "getById" de "ProductService" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função getById', () => {
+        expect(typeof ProductService.getById).to.be.equal('function');
+    });
+
+    describe('Ao buscar determinado produto pelo id informado', () => {
+        describe('Caso não encontre o produto cadastrado com o id informado', () => {
+
+            before(() => {
+                sinon.stub(ProductModel, 'getById').resolves(false);
+            });
+
+            after(() => {
+                ProductModel.getById.restore();
+            });
+            
+            it('Retorna false caso não encontre o produto buscado pelo id informado', async () => {
+                const result = await ProductService.getById();
+                expect(result).to.be.false;
+            });
+            
+        });
+    })
+});
