@@ -1,1 +1,8 @@
-// Renomeie esse arquivo
+const getAll = async () => {
+    return [];
+}
+
+module.exports = {
+    getAll,
+    
+}
