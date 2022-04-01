@@ -61,6 +61,28 @@ describe('Verifica se ao chamar "getById" de "ProductController" ela possuí o c
         expect(typeof ProductController.getById).to.be.equal('function');
     });
 
-    describe('Ao charm', () => {
+    describe('Quando getById de ProductService retorna um produto', () => {
+    });
+
+    describe('Quando getById de não retorna um produto', () => {
+    });
+
+    describe('Quando getById de ProductService retorna um erro', () => {
+        let request = {}, response = {}, next = {};
+        const error = Error('Erro ao processar o serviço');
+        before(() => {
+            next = sinon.stub().returns();
+            request.params = { id: 1 }
+            sinon.stub(ProductService, 'getById').throws(error);
+        });
+    
+        after(() => {
+            ProductService.getById.restore();
+        });
+
+        it('next é chamado passando um Error', async () => {
+            await ProductController.getById(request, response, next);
+            expect(next.calledWith(sinon.match(error))).to.be.equal(true);
+        });
     });
 });
