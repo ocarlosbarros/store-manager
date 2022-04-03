@@ -4,7 +4,7 @@ const connection = require('../../../models/connection');
 
 const SaleModel = require('../../../models/saleModel');
 
-describe.skip('Verifica se ao chamar "getAll" de "SaleModel" ela possuí o comportamento esperado:', () => {
+describe('Verifica se ao chamar "getAll" de "SaleModel" ela possuí o comportamento esperado:', () => {
     
     it('Existe uma função getAll', () => {
         expect(typeof SaleModel.getAll).to.be.equal('function');
@@ -128,7 +128,8 @@ describe('Verifica se ao chamar "getById" de "SaleModel" ela possuí o comportam
             });
 
             it('Verifica se o valor retornado é um objeto com as keys date, productId, quantity', async () => {
-                
+                const [founded] = await SaleModel.getById(1);
+                expect(founded).to.be.have.all.keys('date', 'productId', 'quantity');
             });
 
         });
