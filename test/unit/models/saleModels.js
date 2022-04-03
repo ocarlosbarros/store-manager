@@ -84,16 +84,15 @@ describe('Verifica se ao chamar "getById" de "SaleModel" ela possuí o comportam
     });
 
     describe('Ao buscar determinada venda pelo id informado', () => {
-
-        before(() => {
-            sinon.stub(connection, 'execute').resolves([[], []]);
-        });
-
-        after(() => {
-            connection.execute.restore();
-        });
-
         describe('Caso não encontre a venda cadastrada com o id informado', () => {
+            
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([[], []]);
+            });
+    
+            after(() => {
+                connection.execute.restore();
+            });
             
             it('Retorna false caso não encontre a venda buscada pelo id informado', async () => {
                 const result = await SaleModel.getById();
@@ -103,15 +102,32 @@ describe('Verifica se ao chamar "getById" de "SaleModel" ela possuí o comportam
 
         describe('Caso encontre a venda cadastrada com o id informado', () => {
 
+            const expectedSale = {
+                date: "2021-09-09T04:54:29.000Z",
+                productId: 1,
+                quantity: 2
+            }
+
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([[expectedSale], []]);
+            });
+    
+            after(() => {
+                connection.execute.restore();
+            });
+
+
             it('Verifica se o valor retornado é um objeto', async () => {
-                
+                const [founded] = await SaleModel.getById(1);
+                expect(founded).to.be.an('object');
             });
 
             it('Verifica se o objeto não está vazio', async () => {
-                
+                const [founded] = await SaleModel.getById(1);
+                expect(founded).to.be.not.empty;
             });
 
-            it('Verifica se o valor retornado é um objeto com as keys saleId, date, productId, quantity', async () => {
+            it('Verifica se o valor retornado é um objeto com as keys date, productId, quantity', async () => {
                 
             });
 
