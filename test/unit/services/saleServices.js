@@ -40,5 +40,13 @@ describe('Verifica se ao chamar "getById" de "SaleService" ela possuí o comport
 
     it('Existe uma função getById', () => {
         expect(typeof SaleService.getById).to.be.equal('function');
-    }); 
+    });
+    
+    describe('Caso não encontre a venda cadastrada com o id informado', () => {
+
+    });
+
+    describe('Caso encontre a venda cadastrada com o id informado', () => {
+
+    });
 });
