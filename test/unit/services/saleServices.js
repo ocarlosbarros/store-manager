@@ -44,9 +44,23 @@ describe('Verifica se ao chamar "getById" de "SaleService" ela possuí o comport
     
     describe('Caso não encontre a venda cadastrada com o id informado', () => {
 
+        before(() => {
+            sinon.stub(SaleModel, 'getById').resolves(false);
+        });
+
+        after(() => {
+            SaleModel.getById.restore();
+        });
+
+        it('Retorna false caso não encontre a venda buscada pelo id informado', async () => {
+            const result = await SaleService.getById();
+            expect(result).to.be.equal(false);
+        });
+
     });
 
     describe('Caso encontre a venda cadastrada com o id informado', () => {
 
+        
     });
 });
