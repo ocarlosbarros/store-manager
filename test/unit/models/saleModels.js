@@ -103,6 +103,18 @@ describe('Verifica se ao chamar "getById" de "SaleModel" ela possuí o comportam
 
         describe('Caso encontre a venda cadastrada com o id informado', () => {
 
+            it('Verifica se o valor retornado é um objeto', async () => {
+                
+            });
+
+            it('Verifica se o objeto não está vazio', async () => {
+                
+            });
+
+            it('Verifica se o valor retornado é um objeto com as keys saleId, date, productId, quantity', async () => {
+                
+            });
+
         });
     });
 
