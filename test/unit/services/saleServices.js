@@ -35,3 +35,10 @@ describe('Verifica se ao chamar "getAll" de "SaleService" ela possuí o comporta
         });
     });
 });
+
+describe('Verifica se ao chamar "getById" de "SaleService" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função getById', () => {
+        expect(typeof SaleService.getById).to.be.equal('function');
+    }); 
+});
