@@ -72,7 +72,7 @@ describe('Verifica se ao chamar "getAll" de "ProductModel" ela possuí o comport
             });
         });
 
-        });
+    });
 }); 
 
 describe('Verifica se ao chamar "getById" de "ProductModel" ela possuí o comportamento esperado:', () => {
