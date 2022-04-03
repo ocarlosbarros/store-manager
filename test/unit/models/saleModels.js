@@ -83,4 +83,27 @@ describe('Verifica se ao chamar "getById" de "SaleModel" ela possuí o comportam
         expect(typeof SaleModel.getById).to.be.equal('function');
     });
 
+    describe('Ao buscar determinada venda pelo id informado', () => {
+
+        before(() => {
+            sinon.stub(connection, 'execute').resolves([[], []]);
+        });
+
+        after(() => {
+            connection.execute.restore();
+        });
+
+        describe('Caso não encontre a venda cadastrada com o id informado', () => {
+            
+            it('Retorna false caso não encontre a venda buscada pelo id informado', async () => {
+                const result = await SaleModel.getById();
+                expect(result).to.be.false;
+            });
+        });
+
+        describe('Caso encontre a venda cadastrada com o id informado', () => {
+
+        });
+    });
+
 });
