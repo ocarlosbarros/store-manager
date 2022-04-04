@@ -10,7 +10,18 @@ const getAll = async (_request, response, next) =>  {
     }
 }
 
-const getById = async () => {
+const getById = async (request, response, next) => {
+    const { id } = request.params;
+    try {
+        const founded = await SaleService.getById(id);
+        
+        if(!founded) return response.status(404).json({ message: 'Sale not found'});
+
+        return response.status(200).json(founded);
+        
+    } catch (error) {
+        next(error);
+    }
 
 }
 
