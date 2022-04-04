@@ -58,3 +58,11 @@ describe('Verifica se ao chamar "getAll" de "SaleController" ela possuí o compo
     });
 });
 
+describe('Verifica se ao chamar "getById" de "ProductController" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função getById', () => {
+        expect(typeof SaleController.getById).to.be.equal('function');
+    });
+
+});
+
