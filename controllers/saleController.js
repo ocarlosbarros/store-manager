@@ -10,6 +10,11 @@ const getAll = async (_request, response, next) =>  {
     }
 }
 
+const getById = async () => {
+
+}
+
 module.exports = {
     getAll,
+    getById,
 }
