@@ -87,5 +87,36 @@ describe('Verifica se ao chamar "getById" de "ProductController" ela possuí o c
 
     });
 
+    describe('Quando getById de SaleService retorna uma venda', () => {
+        let request = {}, response = {}, next = {};
+
+        const saleExpected = {
+            date: "2021-09-09T04:54:29.000Z",
+            productId: 1,
+            quantity: 2
+          };
+
+        before(() => {
+            response.status = sinon.stub().returns(response);
+            response.json = sinon.stub().returns();
+            request.params = { id: 1 };
+            sinon.stub(SaleService, 'getById').resolves(saleExpected);
+        });
+
+        after(() => {
+            SaleService.getById.restore();
+        });
+
+        it('responde a requisição com status 200', async () => {
+            await SaleController.getById(request, response, next);
+            expect(response.status.calledWith(200)).to.be.equal(true);
+        });
+
+        it('o método response.json é chamado passando um objeto', async () => {
+            await SaleController.getById(request, response, next);
+            expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+        });
+    });
+
 });
 
