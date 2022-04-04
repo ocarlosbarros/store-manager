@@ -6,5 +6,4 @@ const connection = mysql.createPool({
     password: process.env.MYSQL_PASSWORD,
 });
 
-
 module.exports = connection;
