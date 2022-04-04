@@ -10,7 +10,7 @@ describe("02-list", () => {
 
   beforeAll(async () => {
     const { MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST } = process.env;
-
+    jest.setTimeout(10000);
     connection = mysql.createPool({
       host: MYSQL_HOST,
       user: MYSQL_USER,
