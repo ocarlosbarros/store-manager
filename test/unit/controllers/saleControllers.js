@@ -118,5 +118,31 @@ describe('Verifica se ao chamar "getById" de "ProductController" ela possuí o c
         });
     });
 
+    describe('Quando getById de SaleService não retorna uma venda', () => {
+        let request = {}, response = {}, next = {};
+        const message = { message: "Sale not found" };
+
+        before(() => {
+            response.status = sinon.stub().returns(response);
+            response.json = sinon.stub().returns();
+            request.params = { id: 1 };
+            sinon.stub(SaleService, 'getById').resolves(false);
+        });
+
+        after(() => {
+            SaleService.getById.restore();
+        });
+
+        it('responde a requisição com status 404', async () => {
+            await SaleController.getById(request, response, next);
+            expect(response.status.calledWith(404)).to.be.equal(true);
+        });
+
+        it('o método response.json é chamado passando a mensangem  "Sale not found"', async () => {
+            await SaleController.getById(request, response, next);
+            expect(response.json.calledWith(message)).to.be.true;
+        });
+    });
+
 });
 
