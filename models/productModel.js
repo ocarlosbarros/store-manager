@@ -15,7 +15,7 @@ return products;
 }
 
 const getById = async (id) => {
-    const [product] = await connection.execute(
+    const [result] = await connection.execute(
         `
         SELECT *
             FROM StoreManager.products
@@ -24,7 +24,9 @@ const getById = async (id) => {
         [id]
         );
 
-    if(product.length === 0) return false;
+    if(result.length === 0) return false;
+
+    const product = result.map(product => product)[0]; 
     
     return product;
 }
