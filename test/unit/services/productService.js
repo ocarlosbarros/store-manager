@@ -92,7 +92,7 @@ describe('Verifica se ao chamar "getById" de "ProductService" ela possuí o comp
             });
             
             it('Retorna false caso não encontre o produto buscado pelo id informado', async () => {
-                const result = await ProductService.getById();
+                const result = await ProductService.getById(1);
                 expect(result).to.be.false;
             });
             
