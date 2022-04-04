@@ -117,17 +117,17 @@ describe('Verifica se ao chamar "getById" de "ProductModel" ela possuí o compor
             });
 
             it('Verifica se o valor retornado é um objeto', async () => {
-                const [product] = await ProductModel.getById(1);
+                const product = await ProductModel.getById(1);
                 expect(product).to.be.an('object');
             });
 
             it('Verifica se o objeto não está vazio', async () => {
-                const [product] = await ProductModel.getById(1);
+                const product = await ProductModel.getById(1);
                 expect(product).to.be.not.empty;
             });
 
             it('Verifica se o valor retornado é um objeto com as keys id, name, quantity', async () => {
-                const [product] = await ProductModel.getById(1);
+                const product = await ProductModel.getById(1);
                 expect(product).to.be.have.all.keys('id', 'name', 'quantity');
             });
         });
