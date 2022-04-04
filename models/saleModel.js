@@ -7,11 +7,11 @@ const getAll = async () => {
         FROM StoreManager.sales as S
         INNER JOIN StoreManager.sales_products AS SP ON SP.sale_id = S.id
         ORDER BY S.id, SP.product_id;
-    `
+    `,
     );
 
     return sales;
-}
+};
 
 const getById = async (id) => {
     const [sales] = await connection.execute(
@@ -21,9 +21,10 @@ const getById = async (id) => {
         INNER JOIN StoreManager.sales_products AS SP ON SP.sale_id = S.id
             WHERE S.id = ? ORDER BY S.id, SP.product_id;
     `,
-    [id])
+    [id],
+);
 
-    if(sales.length === 0) return false;
+    if (sales.length === 0) return false;
 
     return sales;
 };
@@ -31,4 +32,4 @@ const getById = async (id) => {
 module.exports = {
     getAll,
     getById,
-}
+};
