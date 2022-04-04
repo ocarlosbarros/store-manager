@@ -61,11 +61,11 @@ describe('Verifica se ao chamar "getById" de "SaleService" ela possuí o comport
 
     describe('Caso encontre a venda cadastrada com o id informado', () => {
 
-        const expectedSale = {
+        const expectedSale = [{
             date: "2021-09-09T04:54:29.000Z",
             productId: 1,
             quantity: 2
-        }
+        }]
 
         before(() => {
             sinon.stub(SaleModel, 'getById').resolves(expectedSale);
@@ -77,7 +77,6 @@ describe('Verifica se ao chamar "getById" de "SaleService" ela possuí o comport
 
         it('Verifica se o valor retornado é um objeto', async () => {
             const [founded] = await SaleService.getById(1);
-            console.log(founded);
             expect(founded).to.be.an('object');
         });
 
@@ -91,5 +90,101 @@ describe('Verifica se ao chamar "getById" de "SaleService" ela possuí o comport
             expect(founded).to.be.have.all.keys('date', 'productId', 'quantity');
         });
         
+    });
+});
+
+describe('Verifica se ao chamar "allSerialize" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função allSerialize', () => {
+
+        expect(typeof SaleService.allSerialize).to.be.equal('function');
+    });
+
+    const sale = {
+        id: 1,
+        date:   '2021-09-09T04:54:29.000Z',
+        product_id: 1,
+        quantity: 10
+    }
+
+    before(() => {
+        sinon.stub(SaleService, 'allSerialize').returns({
+            saleId: sale.id,
+            date: sale.date,
+            productId: sale.product_id,
+            quantity: sale.quantity,
+        });
+    });
+
+    after(() => {
+        SaleService.allSerialize.restore();
+    });
+
+    it('Existe uma função allSerialize', () => {
+
+        expect(typeof SaleService.allSerialize).to.be.equal('function');
+    });
+
+    it('A função é chamada passando um objeto', () => {
+        SaleService.allSerialize(sale);
+        expect(SaleService.allSerialize.calledWith(sinon.match.object)).to.be.equal(true);
+    });
+
+    it('A função retorna um objeto modificado', () => {
+        const serialized = SaleService.allSerialize(sale);
+        expect(serialized).to.deep.equal(
+        {
+            saleId: 1,
+            date:   '2021-09-09T04:54:29.000Z',
+            productId: 1,
+            quantity: 10
+        });
+    });
+});
+
+describe('Verifica se ao chamar "serialize" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função serialize', () => {
+
+        expect(typeof SaleService.serialize).to.be.equal('function');
+    });
+
+    const sale = {
+        id: 1,
+        date:   '2021-09-09T04:54:29.000Z',
+        product_id: 1,
+        quantity: 10
+    }
+
+    before(() => {
+        sinon.stub(SaleService, 'serialize').returns({
+            date: sale.date,
+            productId: sale.product_id,
+            quantity: sale.quantity,
+        });
+    });
+
+    after(() => {
+        SaleService.serialize.restore();
+    });
+
+    it('Existe uma função serialize', () => {
+
+        expect(typeof SaleService.serialize).to.be.equal('function');
+    });
+
+    it('A função é chamada passando um objeto', () => {
+        SaleService.serialize(sale);
+        expect(SaleService.serialize.calledWith(sinon.match.object)).to.be.equal(true);
+    });
+
+    it('A função retorna um objeto modificado', () => {
+        const serialized = SaleService.serialize(sale);
+        expect(serialized).to.deep.equal(
+        {
+            date:   '2021-09-09T04:54:29.000Z',
+            productId: 1,
+            quantity: 10
+        });
     });
 });
