@@ -76,17 +76,18 @@ describe('Verifica se ao chamar "getById" de "SaleService" ela possuí o comport
         });
 
         it('Verifica se o valor retornado é um objeto', async () => {
-            const founded = await SaleService.getById(1);
+            const [founded] = await SaleService.getById(1);
+            console.log(founded);
             expect(founded).to.be.an('object');
         });
 
         it('Verifica se o objeto não está vazio', async () => {
-            const founded = await SaleService.getById(1);
+            const [founded] = await SaleService.getById(1);
             expect(founded).to.be.not.empty;
         });
 
         it('Verifica se o valor retornado é um objeto com as keys date, productId, quantity', async () => {
-            const founded = await SaleService.getById(1);
+            const [founded] = await SaleService.getById(1);
             expect(founded).to.be.have.all.keys('date', 'productId', 'quantity');
         });
         
