@@ -29,9 +29,24 @@ const create = async (product) => {
     return created; 
 };
 
+const update = async (product) => {
+    const { id } = product;
+    
+    const founded = await ProductModel.getById(id);
+    
+    if (!founded) return false;
+    
+    const updated = await ProductModel.update(product);
+    
+    if (!updated) return false;
+
+    return updated;
+  };
+
 module.exports = {
     getAll,
     getById,
     destroy,
     create,
+    update,
 };
