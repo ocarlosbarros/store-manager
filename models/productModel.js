@@ -41,8 +41,25 @@ const destroy = async (id) => {
     return wasDeleted;
 };
 
+const create = async ({ name, quantity }) => {
+    const [{ insertId }] = await connection.execute(
+    `
+    INSERT INTO StoreManage.products(name, quantity)
+        VALUES (?, ?);
+    `,
+    [name, quantity],
+    );
+
+    return {
+        id: insertId,
+        name,
+        quantity,
+    };
+};
+
 module.exports = {
     getAll,
     getById,
     destroy,
+    create,
 };
