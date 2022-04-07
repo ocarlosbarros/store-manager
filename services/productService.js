@@ -17,8 +17,21 @@ const destroy = async (id) => {
     return wasDeleted; 
 };
 
+const create = async (product) => {
+    const { name } = product;
+
+    const productExists = await ProductModel.getByName(name);
+
+    if (productExists) return false;
+
+    const created = await ProductModel.create(product);
+    
+    return created; 
+};
+
 module.exports = {
     getAll,
     getById,
     destroy,
+    create,
 };
