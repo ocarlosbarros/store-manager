@@ -72,10 +72,26 @@ const getByName = async (name) => {
     return true;
   };
 
+const update = async ({ id, name, quantity }) => {
+    const [{ affectedRows: wasUpdated }] = await connection.execute(
+        `
+        UPDATE StoreManager.products
+        SET name = ?, quantity = ?
+        WHERE id = ?;
+        `,
+        [name, quantity, id],
+    );
+
+    if (!wasUpdated) return false;
+ 
+    return { productUpdated: { id, name, quantity } };
+};
+
 module.exports = {
     getAll,
     getById,
     destroy,
     create,
     getByName,
+    update,
 };
