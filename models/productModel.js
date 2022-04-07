@@ -84,7 +84,7 @@ const update = async ({ id, name, quantity }) => {
 
     if (!wasUpdated) return false;
  
-    return { productUpdated: { id, name, quantity } };
+    return { id, name, quantity };
 };
 
 module.exports = {
