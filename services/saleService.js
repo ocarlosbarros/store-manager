@@ -1,4 +1,5 @@
 const SaleModel = require('../models/saleModel');
+const InventoryControl = require('../helpers/inventoryControl');
 
 const allSerialize = (sale) => ({
             saleId: sale.id,
@@ -31,11 +32,16 @@ const getById = async (id) => {
 };
 
 const destroy = async (id) => {
-    const wasDeleted = await SaleModel.destroy(id);
+    const itemsToDelete = await SaleModel.getById(id);
 
-    if (!wasDeleted) return false;
-    
-    return wasDeleted; 
+    if (itemsToDelete.length > 0) {
+        const wasDeleted = await SaleModel.destroy(id);
+        
+        if (!wasDeleted) return wasDeleted; 
+
+        await InventoryControl.addQuantity(itemsToDelete);
+    }
+    return null;
 };
 
 const create = async (sales) => {
