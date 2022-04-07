@@ -22,7 +22,22 @@ const getById = async (request, response, next) => {
     }
 };
 
+const destroy = async (request, response, next) => {
+    const { id } = request.params;
+
+    try {
+        const wasDeleted = await SaleService.destroy(id);
+
+        if (!wasDeleted) return response.status(404).json({ message: 'Sale not found' });
+        
+        return response.status(204).end();
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAll,
     getById,
+    destroy,
 };

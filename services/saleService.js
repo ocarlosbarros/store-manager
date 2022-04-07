@@ -30,9 +30,18 @@ const getById = async (id) => {
     return newSale;
 };
 
+const destroy = async (id) => {
+    const wasDeleted = await SaleModel.destroy(id);
+
+    if (!wasDeleted) return false;
+    
+    return wasDeleted; 
+};
+
 module.exports = {
     getAll,
     getById,
     allSerialize,
     serialize,
+    destroy,
 };
