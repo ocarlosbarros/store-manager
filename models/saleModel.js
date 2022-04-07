@@ -41,8 +41,33 @@ const destroy = async (id) => {
     return wasDeleted;
 };
 
+const create = async (sales) => {
+    const [{ insertId }] = await connection.query(
+    `
+    INSERT INTO StoreManager.sales(date)
+    VALUES (now());
+    `,
+);
+    if (!insertId) throw new Error('Failed to create sales');
+
+    await Promise.all(sales.map(async (sale) => {
+        const { productId, quantity } = sale;
+        
+        await connection.execute(
+        `
+        INSERT INTO StoreManager.sales_products(sale_id, product_id, quantity) 
+            VALUES  (?, ?, ?); 
+        `,
+        [insertId, productId, quantity],
+        );
+    }));
+    
+    return { id: insertId, itemsSold: [...sales] };
+};
+
 module.exports = {
     getAll,
     getById,
     destroy,
+    create,
 };
