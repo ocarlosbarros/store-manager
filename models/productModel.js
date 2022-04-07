@@ -44,7 +44,7 @@ const destroy = async (id) => {
 const create = async ({ name, quantity }) => {
     const [{ insertId }] = await connection.execute(
     `
-    INSERT INTO StoreManage.products(name, quantity)
+    INSERT INTO StoreManager.products(name, quantity)
         VALUES (?, ?);
     `,
     [name, quantity],
@@ -57,9 +57,25 @@ const create = async ({ name, quantity }) => {
     };
 };
 
+const getByName = async (name) => {
+    const [productExists] = await connection.execute(
+      `
+      SELECT * 
+        FROM StoreManager.products 
+          WHERE name = ?;
+      `,
+      [name],
+    );
+
+    if (productExists.length === 0) return false;
+    
+    return true;
+  };
+
 module.exports = {
     getAll,
     getById,
     destroy,
     create,
+    getByName,
 };
