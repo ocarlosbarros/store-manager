@@ -38,10 +38,17 @@ const destroy = async (id) => {
     return wasDeleted; 
 };
 
+const create = async (sales) => {
+    const created = await SaleModel.create(sales);
+    
+    return created; 
+};
+
 module.exports = {
     getAll,
     getById,
     allSerialize,
     serialize,
     destroy,
+    create,
 };
