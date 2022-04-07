@@ -11,7 +11,14 @@ const getById = async (id) => {
     return founded; 
 };
 
+const destroy = async (id) => {
+    const wasDeleted = await ProductModel.destroy(id);
+    
+    return wasDeleted; 
+};
+
 module.exports = {
     getAll,
     getById,
+    destroy,
 };

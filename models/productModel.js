@@ -29,7 +29,20 @@ const getById = async (id) => {
     return founded;
 };
 
+const destroy = async (id) => {
+    const [{ affectedRows: wasDeleted }] = await connection.execute(
+        `
+            DELETE FROM StoreManager.products
+                WHERE id = ?;
+        `,
+        [id],
+    );
+    
+    return wasDeleted;
+};
+
 module.exports = {
     getAll,
     getById,
+    destroy,
 };
