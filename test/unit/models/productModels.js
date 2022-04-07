@@ -133,3 +133,30 @@ describe('Verifica se ao chamar "getById" de "ProductModel" ela possuí o compor
         });
     });
 });
+
+describe('Verifica se ao chamar "destroy" de "ProductModel" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função destroy', () => {
+        expect(typeof ProductModel.destroy).to.be.equal('function');
+    });
+
+    describe('Ao deletar determinado produto pelo id informado', () => {
+        describe('Caso não encontre o produto cadastrado com o id informado', () => {
+            const affectedRows = { affectedRows: 0 };
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([[affectedRows],[]]);
+            });
+
+            after(() => {
+                connection.execute.restore();
+            });
+            
+            it('Retorna 0 caso não encontre o produto buscado pelo id informado', async () => {
+                const wasDeleted = await ProductModel.destroy(999);
+                expect(wasDeleted).to.be.false;
+            });
+            
+        });
+    });
+
+});
