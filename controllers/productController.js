@@ -1,4 +1,5 @@
 const ProductService = require('../services/productService');
+const ProductModel = require('../models/productModel');
 
 const getAll = async (_request, response, next) => {
     try {
@@ -38,8 +39,23 @@ const destroy = async (request, response, next) => {
     }
 };
 
+const create = async (request, response, next) => {
+    const product = request.body;
+
+    try {
+        const created = await ProductService.create(product);
+
+        if (!created) return response.status(409).json({ message: 'Product already exists' });
+
+        return response.status(201).json(created);
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAll,
     getById,
     destroy,
+    create,
 };
