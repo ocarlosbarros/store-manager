@@ -36,8 +36,21 @@ const destroy = async (request, response, next) => {
     }
 };
 
+const create = async (request, response, next) => {
+    const sales = request.body;
+
+    try {
+        const created = await SaleService.create(sales);
+        
+        return response.status(201).json(created);
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAll,
     getById,
     destroy,
+    create,
 };
