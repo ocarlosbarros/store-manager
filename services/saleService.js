@@ -34,14 +34,15 @@ const getById = async (id) => {
 const destroy = async (id) => {
     const itemsToDelete = await SaleModel.getById(id);
 
-    if (itemsToDelete.length > 0) {
-        const wasDeleted = await SaleModel.destroy(id);
-        
-        if (!wasDeleted) return wasDeleted; 
+    if (itemsToDelete.length === 0) return false;
 
-        await InventoryControl.addQuantity(itemsToDelete);
-    }
-    return null;
+    const wasDeleted = await SaleModel.destroy(id);
+        
+    if (!wasDeleted) return wasDeleted; 
+
+    await InventoryControl.addQuantity(itemsToDelete);
+    
+    return wasDeleted;
 };
 
 const create = async (sales) => {
