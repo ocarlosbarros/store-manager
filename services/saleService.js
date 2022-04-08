@@ -48,6 +48,10 @@ const destroy = async (id) => {
 const create = async (sales) => {
     const created = await SaleModel.create(sales);
     
+    if (created) {
+        await InventoryControl.removeQuantity(created.itemsSold);
+    }
+    
     return created; 
 };
 
