@@ -51,6 +51,14 @@ const create = async (sales) => {
     return created; 
 };
 
+const update = async (id, sales) => {
+    await Promise.all(sales.map(async (sale) => {
+        await SaleModel.update({ id, ...sale });
+    }));
+  
+    return { saleId: id, itemUpdated: [...sales] };
+  };
+
 module.exports = {
     getAll,
     getById,
@@ -58,4 +66,5 @@ module.exports = {
     serialize,
     destroy,
     create,
+    update,
 };
