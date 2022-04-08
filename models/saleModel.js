@@ -65,9 +65,34 @@ const create = async (sales) => {
     return { id: insertId, itemsSold: [...sales] };
 };
 
+const update = async ({ id, productId, quantity }) => {
+    const [{ affectedRows: wasUpdated }] = await connection.execute(
+    `
+    UPDATE StoreManager.sales 
+        SET date = now() 
+            WHERE id = ?;
+    `,
+    [id],
+    );
+
+    if (!wasUpdated) throw new Error('Failed to update sales');
+
+    const [{ affectedRows: isUpdated }] = await connection.execute(
+    `
+    UPDATE StoreManager.sales_products 
+        SET sale_id = ?, product_id = ?, quantity = ?
+          WHERE sale_id = ? AND product_id = ?;     
+      `,
+    [id, productId, quantity, id, productId],
+    );
+ 
+  return isUpdated;
+};
+
 module.exports = {
     getAll,
     getById,
     destroy,
     create,
+    update,
 };
