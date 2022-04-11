@@ -1,4 +1,5 @@
 const SaleService = require('../services/saleService');
+const { errors, statusCode } = require('../schemas/globalSchema');
 
 const getAll = async (_request, response, next) => {
     try {
@@ -38,6 +39,13 @@ const destroy = async (request, response, next) => {
 
 const create = async (request, response, next) => {
     const sales = request.body;
+
+    const isValid = await SaleService.validate(sales);
+
+    if (!isValid) {
+        return response.status(statusCode.UNPROCESSABLE_ENTITY)
+      .json({ message: errors.AMOUNT_NOT_PERMITTED }); 
+    } 
 
     try {
         const created = await SaleService.create(sales);
