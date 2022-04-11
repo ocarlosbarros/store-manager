@@ -1,5 +1,6 @@
 const SaleModel = require('../models/saleModel');
 const InventoryControl = require('../helpers/inventoryControl');
+const ProductModel = require('../models/productModel');
 
 const allSerialize = (sale) => ({
             saleId: sale.id,
@@ -63,6 +64,27 @@ const update = async (id, sales) => {
     return { saleId: id, itemUpdated: [...sales] };
   };
 
+  const validate = async (sales) => {
+    try {
+      const productsFounded = sales.map(async (sale) => {
+        const { productId } = sale;
+        const founded = await ProductModel.getById(productId);
+        if (founded) return founded;
+      });
+  
+      const allProducts = await Promise.all(productsFounded);
+      
+      if (!allProducts) return false;
+  
+      const isValid = !(allProducts.some((product, index) => product.id === sales[index].productId 
+      && product.quantity <= sales[index].quantity));
+        
+      return isValid;
+    } catch (error) {
+      console.log(error);
+    }
+};
+
 module.exports = {
     getAll,
     getById,
@@ -71,4 +93,5 @@ module.exports = {
     destroy,
     create,
     update,
+    validate,
 };
