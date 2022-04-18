@@ -161,3 +161,36 @@ describe('Verifica se ao chamar "destroy" de "ProductModel" ela possuí o compor
 
 });
 
+describe('Verifica se ao chamar "create" de "ProductModel" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função create', () => {
+        expect(typeof ProductModel.create).to.be.equal('function');
+    });
+
+    describe('Ao criar determinado produto', () => {
+        describe('Um produto é cadastrado com sucesso', () => {
+            const insertId = { insertId: 1 };
+            
+            const productExpected = {
+                id: 1,
+                name: "Portal Gun",
+                quantity: 10
+            }
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([insertId]);
+            });
+
+            after(() => {
+                connection.execute.restore();
+            });
+            
+            it('Retorna 0 caso não encontre o produto buscado pelo id informado', async () => {
+                const created = await ProductModel.create({ name: "Portal Gun", quantity: 10});
+                expect(created).to.be.deep.equal(productExpected);
+            });
+            
+        });
+    });
+
+});
+
