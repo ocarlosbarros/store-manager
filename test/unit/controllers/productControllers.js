@@ -137,3 +137,82 @@ describe('Verifica se ao chamar "getById" de "ProductController" ela possuí o c
         });
     });
 });
+
+describe('Verifica se ao chamar "destroy" de "ProductController" ela possuí o comportamento esperado:', () => {
+    
+    it('Existe uma função getById', () => {
+        expect(typeof ProductController.destroy).to.be.equal('function');
+    });
+
+    describe('Quando destroy de ProductService exclui um produto', () => {
+        let request = {}, response = {}, next = {};
+
+        before(() => {
+            response.status = sinon.stub().returns(response);
+            response.end = sinon.stub().returns();
+            next = sinon.stub().returns();
+            request.params = { id: 1 };
+            sinon.stub(ProductService, 'destroy').resolves(true);
+        });
+
+        after(() => {
+            ProductService.destroy.restore();
+        });
+
+        it('responde a requisição com status 204', async () => {
+            await ProductController.destroy(request, response, next);
+            expect(response.status.calledWith(204)).to.be.equal(true);
+        });
+
+        it('o método response.json é chamado passando um objeto', async () => {
+            await ProductController.destroy(request, response, next);
+            expect(response.end.calledWith()).to.be.equal(true);
+        });
+    });
+
+    describe('Quando destroy de ProductService não encontra um produto pelo id para ser deletado', () => {
+        let request = {}, response = {}, next = {};
+        const message = { message: "Product not found" };
+
+        before(() => {
+            response.status = sinon.stub().returns(response);
+            response.json = sinon.stub().returns();
+            next = sinon.stub().returns();
+            request.params = { id: 999 };
+            sinon.stub(ProductService, 'destroy').resolves(false);
+        });
+
+        after(() => {
+            ProductService.destroy.restore();
+        });
+
+        it('responde a requisição com status 404', async () => {
+            await ProductController.destroy(request, response, next);
+            expect(response.status.calledWith(404)).to.be.equal(true);
+        });
+
+        it('o método response.json é chamado passando a mensangem  "Product not found"', async () => {
+            await ProductController.destroy(request, response, next);
+            expect(response.json.calledWith(message)).to.be.true;
+        });
+    });
+
+    describe('Quando destroy de ProductService retorna um erro', () => {
+        let request = {}, response = {}, next = {};
+        const error = Error('Erro ao processar o serviço');
+        before(() => {
+            next = sinon.stub().returns();
+            request.params = { id: 1 }
+            sinon.stub(ProductService, 'destroy').throws(error);
+        });
+    
+        after(() => {
+            ProductService.destroy.restore();
+        });
+
+        it('next é chamado passando um Error', async () => {
+            await ProductController.destroy(request, response, next);
+            expect(next.calledWith(sinon.match(error))).to.be.equal(true);
+        });
+    });
+});
