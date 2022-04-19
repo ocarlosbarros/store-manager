@@ -132,3 +132,44 @@ describe('Verifica se ao chamar "getById" de "ProductService" ela possuí o comp
         });
     });
 });
+
+describe('Verifica se ao chamar "destroy" de "ProductService" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função destroy', () => {
+        expect(typeof ProductService.destroy).to.be.equal('function');
+    });
+
+    describe('Ao deletar determinado produto pelo id informado', () => {
+        describe('Caso não encontre o produto cadastrado com o id informado', () => {
+            before(() => {
+                sinon.stub(ProductModel, 'destroy').resolves(false);
+            });
+
+            after(() => {
+                ProductModel.destroy.restore();
+            });
+            
+            it('Retorna false caso não encontre o produto a ser deletado pelo id informado', async () => {
+                const wasDeleted = await ProductService.destroy(999);
+                expect(wasDeleted).to.be.false;
+            });
+            
+        });
+
+        describe('Caso encontre o produto com o id informado deleta o produto', () => {
+            before(() => {
+                sinon.stub(ProductModel, 'destroy').resolves(true);
+            });
+
+            after(() => {
+                ProductModel.destroy.restore();
+            });
+            
+            it('Retorna 1 caso tenha deletado o produto informado', async () => {
+                const wasDeleted = await ProductService.destroy(1);
+                expect(wasDeleted).to.be.true;
+            });
+        });
+    });
+
+});
