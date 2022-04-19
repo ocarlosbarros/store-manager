@@ -151,7 +151,7 @@ describe('Verifica se ao chamar "destroy" de "ProductModel" ela possuí o compor
                 connection.execute.restore();
             });
             
-            it('Retorna 0 caso não encontre o produto buscado pelo id informado', async () => {
+            it('Retorna 0 caso não encontre o produto a ser deletado pelo id informado', async () => {
                 const wasDeleted = await ProductModel.destroy(999);
                 expect(wasDeleted).to.be.false;
             });
