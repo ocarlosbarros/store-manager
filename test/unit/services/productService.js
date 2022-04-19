@@ -173,3 +173,56 @@ describe('Verifica se ao chamar "destroy" de "ProductService" ela possuí o comp
     });
 
 });
+
+describe('Verifica se ao chamar "create" de "ProductService" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função create', () => {
+        expect(typeof ProductService.create).to.be.equal('function');
+    });
+
+    describe('Ao criar determinado produto', () => {
+        describe('Existe um produto com o nome informado', () => {
+            
+            before(() => {
+                sinon.stub(ProductModel, 'create').resolves(false);
+                sinon.stub(ProductModel, 'getByName').resolves(true);
+            });
+
+            after(() => {
+                ProductModel.create.restore();
+                ProductModel.getByName.restore();
+            });
+            
+            it('Retorna o produto criado', async () => {
+                const created = await ProductService.create({ name: "Portal Gun", quantity: 10});
+                expect(created).to.be.deep.equal(false);
+            });
+        });
+
+        describe('Não existe um produto com o nome informado e o produto é cadastrado com sucesso', () => {
+            
+            const productExpected = {
+                id: 1,
+                name: "Portal Gun",
+                quantity: 10
+            }
+
+            before(() => {
+                sinon.stub(ProductModel, 'create').resolves(productExpected);
+                sinon.stub(ProductModel, 'getByName').resolves(false);
+            });
+
+            after(() => {
+                ProductModel.create.restore();
+                ProductModel.getByName.restore();
+            });
+            
+            it('Retorna o produto criado', async () => {
+                const created = await ProductService.create({ name: "Portal Gun", quantity: 10});
+                expect(created).to.be.deep.equal(productExpected);
+            });
+            
+        });
+    });
+
+});
