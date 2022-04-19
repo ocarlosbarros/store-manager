@@ -300,3 +300,91 @@ describe('Verifica se ao chamar "create" de "ProductController" ela possuí o co
         });
     });
 });
+
+describe('Verifica se ao chamar "update" de "ProductController" ela possuí o comportamento esperado:', () => {
+    
+    it('Existe uma função update', () => {
+        expect(typeof ProductController.update).to.be.equal('function');
+    });
+
+    describe('Quando update de ProductService atualiza um produto', () => {
+        let request = {}, response = {}, next = {};
+
+        const productExpected = {
+            id: 1,
+            name: "Portal Gun",
+            quantity: 10,
+        }
+
+        before(() => {
+            response.status = sinon.stub().returns(response);
+            response.json = sinon.stub().returns();
+            next = sinon.stub().returns();
+            request.params = { id: 1 }
+            request.body = { name: "Portal Gun", quantity: 10 };
+            sinon.stub(ProductService, 'update').resolves(productExpected);
+        });
+
+        after(() => {
+            ProductService.update.restore();
+        });
+
+        it('responde a requisição com status 200', async () => {
+            await ProductController.update(request, response, next);
+            expect(response.status.calledWith(200)).to.be.equal(true);
+        });
+
+        it('o método response.json é chamado passando um objeto', async () => {
+            await ProductController.update(request, response, next);
+            expect(response.json.calledWith(productExpected)).to.be.equal(true);
+        });
+    });
+
+    describe('Quando update de ProductService não encontra um produto para ser atualizado', () => {
+        let request = {}, response = {}, next = {};
+        const message = { message: "Product not found" };
+
+        before(() => {
+            response.status = sinon.stub().returns(response);
+            response.json = sinon.stub().returns();
+            request.params = { id: 999 }
+            request.body = { name: "Portal Gun", quantity: 10 };
+            next = sinon.stub().returns();
+            sinon.stub(ProductService, 'update').resolves(false);
+        });
+
+        after(() => {
+            ProductService.update.restore();
+        });
+
+        it('responde a requisição com status 404', async () => {
+            await ProductController.update(request, response, next);
+            expect(response.status.calledWith(404)).to.be.equal(true);
+        });
+
+        it('o método response.json é chamado passando a mensangem  "Product not found"', async () => {
+            await ProductController.update(request, response, next);
+            expect(response.json.calledWith(message)).to.be.true;
+        });
+    });
+
+    describe('Quando update de ProductService retorna um erro', () => {
+        let request = {}, response = {}, next = {};
+        const error = Error('Erro ao processar o serviço');
+        before(() => {
+            next = sinon.stub().returns();
+            request.params = { id: 1 }
+            request.body = { name: "Portal Gun", quantity: 10 };
+            sinon.stub(ProductService, 'update').throws(error);
+        });
+    
+        after(() => {
+            ProductService.update.restore();
+        });
+
+        it('next é chamado passando um Error', async () => {
+            await ProductController.update(request, response, next);
+            expect(next.calledWith(sinon.match(error))).to.be.equal(true);
+        });
+    });
+});
