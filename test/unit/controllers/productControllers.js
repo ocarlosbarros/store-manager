@@ -216,3 +216,87 @@ describe('Verifica se ao chamar "destroy" de "ProductController" ela possuí o c
         });
     });
 });
+
+describe('Verifica se ao chamar "create" de "ProductController" ela possuí o comportamento esperado:', () => {
+    
+    it('Existe uma função create', () => {
+        expect(typeof ProductController.create).to.be.equal('function');
+    });
+
+    describe('Quando create de ProductService cria um produto', () => {
+        let request = {}, response = {}, next = {};
+
+        const productExpected = {
+            id: 1,
+            name: "Portal Gun",
+            quantity: 10,
+        }
+
+        before(() => {
+            response.status = sinon.stub().returns(response);
+            response.json = sinon.stub().returns();
+            next = sinon.stub().returns();
+            request.body = { name: "Portal Gun", quantity: 10 };
+            sinon.stub(ProductService, 'create').resolves(productExpected);
+        });
+
+        after(() => {
+            ProductService.create.restore();
+        });
+
+        it('responde a requisição com status 201', async () => {
+            await ProductController.create(request, response, next);
+            expect(response.status.calledWith(201)).to.be.equal(true);
+        });
+
+        it('o método response.json é chamado passando um objeto', async () => {
+            await ProductController.create(request, response, next);
+            expect(response.json.calledWith(productExpected)).to.be.equal(true);
+        });
+    });
+
+    describe('Quando create de ProductService encontra um produto já cadastrado com o mesmo nome', () => {
+        let request = {}, response = {}, next = {};
+        const message = { message: "Product already exists" };
+
+        before(() => {
+            response.status = sinon.stub().returns(response);
+            response.json = sinon.stub().returns();
+            next = sinon.stub().returns();
+            sinon.stub(ProductService, 'create').resolves(false);
+        });
+
+        after(() => {
+            ProductService.create.restore();
+        });
+
+        it('responde a requisição com status 409', async () => {
+            await ProductController.create(request, response, next);
+            expect(response.status.calledWith(409)).to.be.equal(true);
+        });
+
+        it('o método response.json é chamado passando a mensangem  "Product already exists"', async () => {
+            await ProductController.create(request, response, next);
+            expect(response.json.calledWith(message)).to.be.true;
+        });
+    });
+
+    describe('Quando create de ProductService retorna um erro', () => {
+        let request = {}, response = {}, next = {};
+        const error = Error('Erro ao processar o serviço');
+        before(() => {
+            next = sinon.stub().returns();
+            request.params = { id: 1 }
+            sinon.stub(ProductService, 'create').throws(error);
+        });
+    
+        after(() => {
+            ProductService.create.restore();
+        });
+
+        it('next é chamado passando um Error', async () => {
+            await ProductController.create(request, response, next);
+            expect(next.calledWith(sinon.match(error))).to.be.equal(true);
+        });
+    });
+});
