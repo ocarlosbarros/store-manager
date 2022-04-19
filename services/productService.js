@@ -37,8 +37,6 @@ const update = async (product) => {
     if (!founded) return false;
     
     const updated = await ProductModel.update(product);
-    
-    if (!updated) return false;
 
     return updated;
   };
