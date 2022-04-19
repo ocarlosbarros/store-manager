@@ -157,6 +157,22 @@ describe('Verifica se ao chamar "destroy" de "ProductModel" ela possuí o compor
             });
             
         });
+
+        describe('Caso encontre o produto com o id informado deleta o produto', () => {
+            const wasDeleted = { affectedRows: true };
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([wasDeleted]);
+            });
+
+            after(() => {
+                connection.execute.restore();
+            });
+            
+            it('Retorna 1 caso tenha deletado o produto informado', async () => {
+                const wasDeleted = await ProductModel.destroy(1);
+                expect(wasDeleted).to.be.true;
+            });
+        });
     });
 
 });
@@ -176,6 +192,7 @@ describe('Verifica se ao chamar "create" de "ProductModel" ela possuí o comport
                 name: "Portal Gun",
                 quantity: 10
             }
+
             before(() => {
                 sinon.stub(connection, 'execute').resolves([insertId]);
             });
@@ -189,6 +206,58 @@ describe('Verifica se ao chamar "create" de "ProductModel" ela possuí o comport
                 expect(created).to.be.deep.equal(productExpected);
             });
             
+        });
+    });
+
+});
+
+describe('Verifica se ao chamar "getByName" de "ProductModel" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função getByName', () => {
+        expect(typeof ProductModel.getByName).to.be.equal('function');
+    });
+
+    describe('Ao criar determinado produto', () => {
+        describe('Caso não encontre o produto cadastrado com o name informado', () => {
+            
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([[], []]);
+            });
+
+            after(() => {
+                connection.execute.restore();
+            });
+
+            
+            it('Retorna false caso não encontre o produto com o name informado', async () => {
+                const product = await ProductModel.getByName('Portal Gun');
+                expect(product).to.be.equal(false);
+            });
+
+        });
+
+        describe('Caso encontre o produto cadastrado com o name informado', () => {
+
+            const productExpected = {
+                id: 1,
+                name: "Portal Gun",
+                quantity: 10
+            }
+
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([[productExpected], []]);
+            });
+
+            after(() => {
+                connection.execute.restore();
+            });
+
+            
+            it('Retorna true caso encontre o produto com o name informado', async () => {
+                const product = await ProductModel.getByName('Portal Gun');
+                expect(product).to.be.equal(true);
+            });
+
         });
     });
 
