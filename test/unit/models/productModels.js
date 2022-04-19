@@ -260,6 +260,60 @@ describe('Verifica se ao chamar "getByName" de "ProductModel" ela possuí o comp
 
         });
     });
+});
+
+describe('Verifica se ao chamar "update" de "ProductModel" ela possuí o comportamento esperado:', () => {
+
+    it('Existe uma função update', () => {
+        expect(typeof ProductModel.update).to.be.equal('function');
+    });
+
+    describe('Ao atualizar determinado produto', () => {
+        describe('Não existe um produto com o id informado para atualização', () => {
+
+            const wasUpdated = { affectedRows: false };
+
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([wasUpdated]);
+            });
+
+            after(() => {
+                connection.execute.restore();
+            });
+            
+            it('Retorna false caso não tenha atualizado o produto pois não existe produto com id informado', async () => {
+                const updated = await ProductModel.update(999);
+                expect(updated).to.be.equal(false);
+            });
+
+        });
+                
+        describe('Um produto é atualizado com sucesso', () => {
+            
+            const productExpected = {
+                id: 1,
+                name: "Portal Gun",
+                quantity: 10
+            }
+
+            const wasUpdated = { affectedRows: true };
+
+
+            before(() => {
+                sinon.stub(connection, 'execute').resolves([wasUpdated]);
+            });
+
+            after(() => {
+                connection.execute.restore();
+            });
+            
+            it('Retorna o produto atualizado informado', async () => {
+                const updated = await ProductModel.update({ id: 1, name: "Portal Gun", quantity: 10});
+                expect(updated).to.be.deep.equal(productExpected);
+            });
+            
+        });
+    });
 
 });
 
