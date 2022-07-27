@@ -1,7 +1,7 @@
 {
-  "name": "sd-0x-store-manager",
+  "name": "store-manager",
   "version": "1.0.0",
-  "description": "Simple CRUD to sales and products",
+  "description": "API RESTFUL Nodejs using Model, Service, Controller architecture, and MySQL database to manage simple CRUD to sales and products",
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand",
@@ -10,16 +10,12 @@
     "debug": "nodemon index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tryber/sd-02-project-store-manager.git"
-  },
-  "author": "",
+  "author": "Carlos Barros",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tryber/sd-02-project-store-manager/issues"
+    "url": "https://github.com/ocarlosbarros/store-manager/issues"
   },
-  "homepage": "https://github.com/tryber/sd-02-project-store-manager#readme",
+  "homepage": "https://github.com/ocarlosbarros/store-manager#readme",
   "dependencies": {
     "@hapi/boom": "^9.1.0",
     "body-parser": "^1.19.0",
