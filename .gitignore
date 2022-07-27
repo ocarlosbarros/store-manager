@@ -1,0 +1,13 @@
+### dotenv enviroment
+.env
+
+### Dependency directories
+node_modules
+
+### Visual Studio Code
+.vscode/*
+
+### Tests directories and files
+coverage
+.nyc
+
