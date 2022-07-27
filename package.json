@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand",
-    "test:mocha": "nyc --all --include models --include services --include controllers mocha test/unit/**/*.js --exit",
+    "test:mocha": "nyc --all --include models --include services --include controllers mocha __test__/unit/**/*.js --exit",
     "start": "node index.js",
     "debug": "nodemon index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx"
